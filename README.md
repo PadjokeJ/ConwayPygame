@@ -1,2 +1,2 @@
 # ConwayPygame
-# School project
+ School project
