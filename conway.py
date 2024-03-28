@@ -1,6 +1,6 @@
 import pygame
 from copy import copy
-gridSize = (100, 100)
+gridSize = (10, 10)
 cells = []
 cellsNext = {}
 def initGrid():
@@ -8,6 +8,13 @@ def initGrid():
     for i in range(gridSize[1]):
         newCells[i] = [copy(False) for i in range(gridSize[1])]
     cells.append(newCells)
+
+def checkNeighbors():
+    for i in range(gridSize[1] - 1):
+        for j in range(gridSize[0] - 1):
+            print(i)
+            print(cells[i])
+
 neighbors = (
     (-1, 1),
     (-1, 0),
@@ -18,16 +25,7 @@ neighbors = (
     (1, 0),
     (1, -1)
     )
-#check for neighbors:
 initGrid()
+checkNeighbors()
 cellsNext.clear()
-print (cells)
-#for x in range(gridSize[0]) :
-#    xNeighbors = []
-#    yNeighbors = []
-#    for y in range(gridSize[1]) :
-#        numNeighbors = 0
-#        for i in neighbors:
-#            if cells[y][x]:
-#                numNeighbors += 1
-        
+
