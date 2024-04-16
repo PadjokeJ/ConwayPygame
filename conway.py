@@ -1,5 +1,8 @@
 import pygame
+import math
 from copy import copy
+from rendering import render
+from screenUpdater import updateScreen
 
 # --init--
 scr = (width, height) = (960, 960)
@@ -7,7 +10,7 @@ screen = pygame.display.set_mode((width, height))
 game = True
 clock = pygame.time.Clock()
 
-gridSize = (10, 10)
+gridSize = (96, 96)
 cells = {}
 neighbors = (
     (-1, 1),
@@ -19,6 +22,7 @@ neighbors = (
     (1, 0),
     (1, -1)
     )
+pixSize = (scr[0] / gridSize[0], scr[1] / gridSize[1])
 
 def initGrid():
     newCells = {}
@@ -26,53 +30,36 @@ def initGrid():
         newCells[i] = [copy(False) for i in range(gridSize[1])]
     return newCells
 
-def checkNeighbors(c):
-    deltaCells = c
-    for i in range(gridSize[1] - 2):
-        for j in range(gridSize[0] - 2):
-            c_x = i + 1
-            c_y = j + 1
-            aliveNeighbors = 0
-            for n in range(8):
-                x = neighbors[n][0]
-                y = neighbors[n][1]
-                cell = c[c_x + x][c_y + y]
-                if cell:
-                    aliveNeighbors += 1
-            #check if cell is dead
-            if c[c_x][c_y] == False:
-                if aliveNeighbors == 3:
-                    deltaCells[c_x][c_y] = True
-            else:
-                if aliveNeighbors <= 1:
-                    deltaCells[c_x][c_y] = False
-                if aliveNeighbors >= 4:
-                    deltaCells[c_x][c_y] = False
-    return deltaCells
-
-def render(c, _gridSize, _scr, _screen):
-    pixWidth = _scr[0] / _gridSize[0]
-    pixHeight = _scr[1] / _gridSize[1]
-    for i in range(gridSize[0]):
-        for j in range(gridSize[1]):
-            if(c[i][j]):
-                p = pygame.Rect(i * pixWidth, j * pixHeight, pixWidth, pixHeight)
-                pygame.draw.rect(_screen, (0, 0, 0), p)
 # -- pre launch --
 cells = initGrid()
+paused = True
+ticker = 0
 # -- loop --
 while game:
     # -- general init --
     clock.tick(60)
 
-    cells = checkNeighbors(cells)
-
+    if paused == False:
+        ticker += 1
+        if ticker >= 6:
+            cells = updateScreen(cells, gridSize, neighbors)
+            ticker = 0
     # -- Inputs --
+    pixSel = (math.floor(pygame.mouse.get_pos()[0] / pixSize[0]), math.floor(pygame.mouse.get_pos()[1] / pixSize[1]))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
             break
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                paused = not paused
+            if event.key == pygame.K_RIGHT:
+                cells = updateScreen(cells, gridSize, neighbors)
+        if pygame.mouse.get_pressed(num_buttons=3)[0] == True:
+            cells[pixSel[0]][pixSel[1]] = not cells[pixSel[0]][pixSel[1]]
     # -- Render logic --
+    
     screen.fill((255, 255, 255))
     render(cells, gridSize, scr, screen)
+    pygame.draw.rect(screen, (120, 120, 120), (pixSel[0] * pixSize[0], pixSel[1] * pixSize[1], pixSize[0], pixSize[1]))
     pygame.display.flip()
