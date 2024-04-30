@@ -12,14 +12,13 @@ def updateScreen(c, _gridSize, _neighbors):
                 x = _neighbors[n][0]
                 y = _neighbors[n][1]
                 # print(c_x, x)
-                cell = originalCells[c_x + x][c_y + y]
+                cell = originalCells[str(c_x + x)][c_y + y]
                 if cell:
                     aliveNeighbors += 1
-            #check if cell is dead
             if aliveNeighbors == 3:
-                deltaCells[c_x][c_y] = True
+                deltaCells[str(c_x)][c_y] = True
             if aliveNeighbors <= 1:
-                deltaCells[c_x][c_y] = False
+                deltaCells[str(c_x)][c_y] = False
             if aliveNeighbors >= 4:
-                deltaCells[c_x][c_y] = False
+                deltaCells[str(c_x)][c_y] = False
     return deltaCells

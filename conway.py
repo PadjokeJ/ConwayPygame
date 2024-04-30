@@ -3,6 +3,8 @@ import math
 from copy import copy
 from rendering import render
 from screenUpdater import updateScreen
+from saver import save
+from saver import load
 
 # --init--
 scr = (width, height) = (960, 960)
@@ -27,7 +29,7 @@ pixSize = (scr[0] / (gridSize[0]), scr[1] / (gridSize[1]))
 def initGrid():
     newCells = {}
     for i in range(gridSize[0]):
-        newCells[i] = [copy(False) for i in range(gridSize[1])]
+        newCells[str(i)] = [copy(False) for i in range(gridSize[1])]
     return newCells
 
 # -- pre launch --
@@ -37,11 +39,13 @@ ticker = 0
 speed = 60
 # -- loop --
 state = False
+isTicking = True
 while game:
     # -- general init --
     clock.tick(speed)
-
-    if paused == False:
+    if(not isTicking and not paused):
+       cells = updateScreen(cells, gridSize, neighbors)
+    elif paused == False:
         ticker += 1
         if ticker >= 6:
             cells = updateScreen(cells, gridSize, neighbors)
@@ -59,12 +63,18 @@ while game:
                 cells = updateScreen(cells, gridSize, neighbors)
             if event.key == pygame.K_f:
                 speed = 1000
+                isTicking = False
             if event.key == pygame.K_s:
+                isTicking = True
                 speed = 60
+            if event.key == pygame.K_F5:
+                save(cells)
+            if event.key == pygame.K_F6:
+                cells = load()
         if pygame.mouse.get_pressed(num_buttons=3)[0] == True:
             if not clicked:
-                state = not cells[pixSel[0]][pixSel[1]]
-            cells[pixSel[0]][pixSel[1]] = state
+                state = not cells[str(pixSel[0])][pixSel[1]]
+            cells[str(pixSel[0])][pixSel[1]] = state
             clicked = True
         else:
             clicked = False
