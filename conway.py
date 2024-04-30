@@ -72,7 +72,7 @@ while game:
             if event.key == pygame.K_F5:
                 save(cells)
             if event.key == pygame.K_F6:
-                cells = load()
+                cells = load(str(0))
             if event.key == pygame.K_F2:
                 toScreenshot = True
         if pygame.mouse.get_pressed(num_buttons=3)[0] == True:
