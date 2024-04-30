@@ -5,6 +5,7 @@ from rendering import render
 from screenUpdater import updateScreen
 from saver import save
 from saver import load
+from screenshotter import screenshot
 
 # --init--
 scr = (width, height) = (960, 960)
@@ -40,6 +41,7 @@ speed = 60
 # -- loop --
 state = False
 isTicking = True
+toScreenshot = False
 while game:
     # -- general init --
     clock.tick(speed)
@@ -71,6 +73,8 @@ while game:
                 save(cells)
             if event.key == pygame.K_F6:
                 cells = load()
+            if event.key == pygame.K_F2:
+                toScreenshot = True
         if pygame.mouse.get_pressed(num_buttons=3)[0] == True:
             if not clicked:
                 state = not cells[str(pixSel[0])][pixSel[1]]
@@ -82,6 +86,9 @@ while game:
     
     screen.fill((255, 255, 255))
     render(cells, gridSize, scr, screen)
+    if(toScreenshot):
+        screenshot(screen)
+        toScreenshot = False
     pygame.draw.rect(screen, (120, 120, 120), (pixSel[0] * pixSize[0], pixSel[1] * pixSize[1], pixSize[0], pixSize[1]))
     pygame.display.flip()
 pygame.quit()
