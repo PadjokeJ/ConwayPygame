@@ -45,6 +45,8 @@ font = pygame.font.SysFont('Comic Sans MS',  10)
 state = False
 isTicking = True
 toScreenshot = False
+x = 0
+y = 0
 while game:
     # -- general init --
     clock.tick(speed)
@@ -64,7 +66,7 @@ while game:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 paused = not paused
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_LSHIFT:
                 cells = updateScreen(cells, gridSize, neighbors)
             if event.key == pygame.K_f:
                 speed = 1000
@@ -89,9 +91,18 @@ while game:
             clicked = True
         else:
             clicked = False
+    keys = pygame.key.get_pressed()  
+    if keys[pygame.K_UP]:
+        y += 1
+    if keys[pygame.K_DOWN]:
+        y -= 1
+    if keys[pygame.K_LEFT]:
+        x += 1
+    if keys[pygame.K_RIGHT]:
+        x -= 1
     # -- Render logic --
     screen.fill((255, 255, 255))
-    render(cells, gridSize, scr, screen)
+    render(cells, gridSize, scr, screen, x, y)
     if(toScreenshot):
         screenshot(screen)
         toScreenshot = False

@@ -14,7 +14,7 @@ def save (list):
 def load(i):
     with open("patterns.json") as f:
         objects = json.load(f)
-    while(len(objects)-1 < i):
+    while(objects[-1] -1 < i):
         i = i - len(objects) + 1
     with open("pattern" + str(i) + ".json") as f:
         list = json.load(f)
