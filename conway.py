@@ -8,6 +8,7 @@ from saver import load
 from screenshotter import screenshot
 
 # --init--
+pygame.init()
 scr = (width, height) = (960, 960)
 screen = pygame.display.set_mode((width, height))
 game = True
@@ -39,6 +40,7 @@ paused = True
 ticker = 0
 speed = 60
 i = 0
+font = pygame.font.SysFont('Comic Sans MS',  10)
 # -- loop --
 state = False
 isTicking = True
@@ -88,12 +90,13 @@ while game:
         else:
             clicked = False
     # -- Render logic --
-    
     screen.fill((255, 255, 255))
     render(cells, gridSize, scr, screen)
     if(toScreenshot):
         screenshot(screen)
         toScreenshot = False
     pygame.draw.rect(screen, (120, 120, 120), (pixSel[0] * pixSize[0], pixSel[1] * pixSize[1], pixSize[0], pixSize[1]))
+    txt = font.render(str(i), False, (0, 0, 0))
+    screen.blit(txt, (0, 0))
     pygame.display.flip()
 pygame.quit()
