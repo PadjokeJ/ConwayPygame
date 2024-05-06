@@ -38,6 +38,7 @@ cells = initGrid()
 paused = True
 ticker = 0
 speed = 60
+i = 0
 # -- loop --
 state = False
 isTicking = True
@@ -72,9 +73,13 @@ while game:
             if event.key == pygame.K_F5:
                 save(cells)
             if event.key == pygame.K_F6:
-                cells = load(str(0))
+                cells = load(i)
             if event.key == pygame.K_F2:
                 toScreenshot = True
+        if event.type == pygame.MOUSEWHEEL:
+            i += int(event.y)
+            if i < 0:
+                i = 0
         if pygame.mouse.get_pressed(num_buttons=3)[0] == True:
             if not clicked:
                 state = not cells[str(pixSel[0])][pixSel[1]]
