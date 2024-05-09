@@ -1,4 +1,4 @@
-import pygame # type: ignore
+import pygame
 import math
 from copy import copy
 from rendering import render
