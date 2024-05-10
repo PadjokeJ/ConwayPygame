@@ -87,7 +87,10 @@ while game:
         if pygame.mouse.get_pressed(num_buttons=3)[0] == True:
             if not clicked:
                 state = not cells[str(pixSel[0])][pixSel[1]]
-            cells[str(pixSel[0])][pixSel[1]] = state
+            try: 
+                cells[str(pixSel[0])][pixSel[1]] = state
+            except:
+                print("Clicked out of bounds")
             clicked = True
         else:
             clicked = False
