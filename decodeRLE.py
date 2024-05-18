@@ -14,12 +14,22 @@ def openRLE(filename):
     
     x = int(coords[0].split("= ")[1])
     y = int(coords[1].split("= ")[1])
-    print(x, y)
-
+    if len(coords) == 3:
+        rules = coords[2].split("/")
+        rules[0] = rules[0][7:]
+        if rules[0][0] in ["b", "B"]: 
+            birthRule = list(int(x) for x in rules[0][1:])
+            surviveRule = list(int(x) for x in rules[1][1:])
+        else:
+            birthRule = list(int(x) for x in rules[0])
+            surviveRule = list(int(x) for x in rules[1])
+    else:
+        birthRule = [3]
+        surviveRule = [2, 3]
     bit = ""
     num = 0
     y_coord = 0
-    cells = {"size" : [x,y]}
+    cells = {"size" : [x,y], "birthRule" : birthRule, "surviveRule" : surviveRule}
     newCells = []
     for i in pixels:
         if i == "$" or i == "!": 
@@ -44,3 +54,4 @@ def openRLE(filename):
     cells[str(y_coord)] = newCells
     f.close()
     return cells
+#openRLE("rle/2x2linepuffer.rle")

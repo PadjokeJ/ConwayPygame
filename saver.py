@@ -25,7 +25,7 @@ def load(i):
 # down below is code if you decide to index any RLE file you add in the RLE folder
 
 def updateRLES():
-    list = listdir("insert RLE path")
+    list = listdir("enter path here (separators are forward slashes)")
     with open("RLES.json", "w") as f:
         json.dump(list, f)
     f.close()
@@ -34,3 +34,4 @@ def readRLES():
         objects = json.load(f)
     f.close()
     return objects
+# updateRLES() #remove comment from this line

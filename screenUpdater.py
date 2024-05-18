@@ -4,7 +4,7 @@ def warp(n, min, max):
     if n < min: n = max
     if n > max: n = min
     return n
-def updateScreen(c, _gridSize, _neighbors):
+def updateScreen(c, _gridSize, _neighbors, surviveRule, lifeRule):
     deltaCells = deepcopy(c)
     originalCells = deepcopy(c)
     for i in range(0, _gridSize[1]):
@@ -17,7 +17,6 @@ def updateScreen(c, _gridSize, _neighbors):
                 y = warp(_neighbors[n][1] + c_y, 0, _gridSize[1] - 1)
                 cell = originalCells[str(x)][y]
                 if cell: aliveNeighbors += 1
-            if aliveNeighbors == 3: deltaCells[str(c_x)][c_y] = True
-            if aliveNeighbors <= 1: deltaCells[str(c_x)][c_y] = False
-            if aliveNeighbors >= 4: deltaCells[str(c_x)][c_y] = False
+            if aliveNeighbors in lifeRule: deltaCells[str(c_x)][c_y] = True
+            elif not aliveNeighbors in surviveRule: deltaCells[str(c_x)][c_y] = False
     return deltaCells

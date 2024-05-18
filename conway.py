@@ -31,6 +31,8 @@ pixSize = (scr[0] / (gridSize[0]), scr[1] / (gridSize[1]))
 
 def initGrid():
     newCells = {}
+    newCells["birthRules"] = [3]
+    newCells["surviveRules"] = [2, 3]
     for i in range(gridSize[0]):
         newCells[str(i)] = [copy(False) for i in range(gridSize[1])]
     return newCells
@@ -38,6 +40,8 @@ def initRLE(rle):
     cells = initGrid()
     rleCells = decodeRLE.openRLE("rle/"+ rle)
     size = rleCells["size"]
+    cells["birthRules"] = rleCells["birthRule"]
+    cells["surviveRules"] = rleCells["surviveRule"]
     print(size)
     for i in range(0, size[1]):
         for j in range(0, size[0]):
@@ -64,11 +68,11 @@ while game:
     # -- general init --
     clock.tick(speed)
     if(not isTicking and not paused):
-       cells = updateScreen(cells, gridSize, neighbors)
+       cells = updateScreen(cells, gridSize, neighbors, cells["surviveRules"], cells["birthRules"])
     elif paused == False:
         ticker += 1
         if ticker >= 6:
-            cells = updateScreen(cells, gridSize, neighbors)
+            cells = updateScreen(cells, gridSize, neighbors, cells["surviveRules"], cells["birthRules"])
             ticker = 0
     # -- Inputs --
     pixSel = (math.floor(pygame.mouse.get_pos()[0] / pixSize[0]), math.floor(pygame.mouse.get_pos()[1] / pixSize[1]))
