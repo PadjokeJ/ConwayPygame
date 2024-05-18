@@ -1,5 +1,6 @@
 import json
-from os import listdir
+from os import listdir, path
+
 def save (list, g_x, g_y):
     objects = [0]
     with open("patterns.json") as f:
@@ -52,7 +53,7 @@ def load(i):
 # down below is code if you decide to index any RLE file you add in the RLE folder
 
 def updateRLES():
-    list = listdir("enter path here (separators are forward slashes)")
+    list = listdir(path.dirname(__file__) + "/rle")
     with open("RLES.json", "w") as f:
         json.dump(list, f)
     f.close()
@@ -61,4 +62,4 @@ def readRLES():
         objects = json.load(f)
     f.close()
     return objects
-# updateRLES() #remove comment from this line
+updateRLES() #remove comment from this line
