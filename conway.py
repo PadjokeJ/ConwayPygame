@@ -1,3 +1,4 @@
+#Conway project ver 2.0
 import pygame
 import math
 from copy import copy, deepcopy
@@ -29,6 +30,10 @@ neighbors = (
     )
 pixSize = (scr[0] / (gridSize[0]), scr[1] / (gridSize[1]))
 
+def warp(x, min, max):
+    if x < min: x = x + max
+    if x > max: x = x - max
+    return x
 def initGrid():
     newCells = {}
     newCells["birthRules"] = [3]
@@ -55,7 +60,7 @@ cells = initGrid()
 empty_grid = initGrid()
 paused = True
 ticker = 0
-speed = 60
+speed = 120
 i = 0
 font = pygame.font.SysFont('Comic Sans MS',  10)
 # -- loop --
@@ -71,11 +76,13 @@ while game:
        cells = updateScreen(cells, gridSize, neighbors, cells["surviveRules"], cells["birthRules"])
     elif paused == False:
         ticker += 1
-        if ticker >= 6:
+        if ticker >= 12:
             cells = updateScreen(cells, gridSize, neighbors, cells["surviveRules"], cells["birthRules"])
             ticker = 0
     # -- Inputs --
     pixSel = (math.floor(pygame.mouse.get_pos()[0] / pixSize[0]), math.floor(pygame.mouse.get_pos()[1] / pixSize[1]))
+    realPos = pixSel
+    pixSel = (warp(pixSel[0] - x, 0, gridSize[0]), warp(pixSel[1] + y, 0, gridSize[1]))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
@@ -84,13 +91,11 @@ while game:
             if event.key == pygame.K_SPACE:
                 paused = not paused
             if event.key == pygame.K_LSHIFT:
-                cells = updateScreen(cells, gridSize, neighbors)
+                cells = updateScreen(cells, gridSize, neighbors, cells["surviveRules"], cells["birthRules"])
             if event.key == pygame.K_f:
-                speed = 1000
                 isTicking = False
             if event.key == pygame.K_s:
                 isTicking = True
-                speed = 60
             if event.key == pygame.K_F4:
                 cells = initGrid()
             if event.key == pygame.K_F5:
@@ -110,31 +115,34 @@ while game:
                 else : break
         if pygame.mouse.get_pressed(num_buttons=3)[0] == True:
             if not clicked:
-                state = not cells[str(pixSel[0])][pixSel[1]]
+                try:
+                    state = not cells[str(pixSel[0])][pixSel[1]]
+                except:
+                    print("pixel is out of bounds", str(pixSel[0]), str(pixSel[1]))
             try: 
                 cells[str(pixSel[0])][pixSel[1]] = state
             except:
-                print("Clicked out of bounds")
+                print("Clicked out of bounds", str(pixSel[0]), str(pixSel[1]))
             clicked = True
         else:
             clicked = False
     keys = pygame.key.get_pressed()  
-    if keys[pygame.K_UP]:
-        y += 1
-    if keys[pygame.K_DOWN]:
-        y -= 1
-    if keys[pygame.K_LEFT]:
-        x += 1
-    if keys[pygame.K_RIGHT]:
-        x -= 1
+    if keys[pygame.K_UP]: y += 1
+    if keys[pygame.K_DOWN]: y -= 1
+    if keys[pygame.K_LEFT]: x -= 1
+    if keys[pygame.K_RIGHT]: x += 1
+    x = warp(x, 0, gridSize[0])
+    y = warp(y, 0, gridSize[1] - 1)
     # -- Render logic --
-    screen.fill((255, 255, 255))
+    screen.fill("#d7dedc")
     render(cells, gridSize, scr, screen, x, y)
     if(toScreenshot):
         screenshot(screen)
         toScreenshot = False
-    pygame.draw.rect(screen, (120, 120, 120), (pixSel[0] * pixSize[0], pixSel[1] * pixSize[1], pixSize[0], pixSize[1]))
-    txt = font.render(str(i) + RLE_list[i], False, (0, 0, 0))
+    pygame.draw.rect(screen, (120, 120, 120), (realPos[0] * pixSize[0], realPos[1] * pixSize[1], pixSize[0], pixSize[1]))
+    txt = font.render(str(i) + " : "+ RLE_list[i], False, (0, 0, 0))
+    fps = font.render("fps: " + str(math.floor(pygame.time.Clock.get_fps(clock))), False, (0, 0, 0))
     screen.blit(txt, (0, 0))
+    screen.blit( fps, (920, 0))
     pygame.display.flip()
 pygame.quit()

@@ -17,9 +17,12 @@ SCROLL: change RLE file to load
 F7 : loads the selected RLE file
 F6 : loads user made pattern
 F5 : creates user made pattern
+F4 : clears the screen
+ARROW KEYS : move around the canvas
 
 ## Adding your own RLE files
-Please note that you can add your own RLE files, but you need to run a function inside of the saver.py file. Paste the RLE folder path (the one inside of the project) into the field. MAKE SURE THAT PATH IS WITH FORWARD SLASHES "/"!!!! Run UpdateRLES(). (Make sure to disable UpdateRLES() once you're done)
+To add your own RLE files inside of the program, just drag them into the rle folder, the program will detect them automatically
 
 Feel free to contribute to this project or modify it in any way
 I do not recommend copying the code inside of this repo as it is quite unoptimised. 
+In fact, this code runs at around 40fps when computing the whole board.
