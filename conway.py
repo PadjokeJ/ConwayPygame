@@ -96,7 +96,7 @@ while game:
             if event.key == pygame.K_F5:
                 save(cells, gridSize[0], gridSize[1])
             if event.key == pygame.K_F6:
-                cells = load()
+                cells = load(i)
             if event.key == pygame.K_F7:
                 cells = initRLE(RLE_list[i])
             if event.key == pygame.K_F2:

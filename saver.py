@@ -2,7 +2,15 @@ import json
 from os import listdir
 def save (list, g_x, g_y):
     objects = [0]
-    f = open("cgol/pattern.cgol", "w")
+    with open("patterns.json") as f:
+        objects = json.load(f)
+    f.close()
+    objects.append(objects[-1] + 1)
+    with open("patterns.json", "w") as f:
+        json.dump(objects, f)
+    f.close()
+
+    f = open("cgol/pattern"+ str(objects[-1]) +".cgol", "w")
     for x in list["surviveRules"]:
         f.write(str(x))
     f.write("/")
@@ -17,8 +25,13 @@ def save (list, g_x, g_y):
         f.write(line + "$")
     f.close()
 
-def load():
-    f = open("cgol/pattern.cgol", "r")
+def load(i):
+    with open("patterns.json") as f:
+        objects = json.load(f)
+    while True:
+        if i > objects[-1] - 1: i -= 1
+        else : break
+    f = open("cgol/pattern"+ str(objects[i]) +".cgol", "r")
     s = f.readline()
     rows = s.split("!")
     rules = rows[0].split("/")
@@ -33,7 +46,7 @@ def load():
             else: line.append(False)
         cells[str(y)] = line
         y += 1
-    print(cells)
+    f.close()
     return cells
 
 # down below is code if you decide to index any RLE file you add in the RLE folder
