@@ -92,9 +92,7 @@ while game:
                 isTicking = True
                 speed = 60
             if event.key == pygame.K_F5:
-                save(cells)
-            if event.key == pygame.K_F6:
-                cells = load(i)
+                cells = initGrid()
             if event.key == pygame.K_F7:
                 cells = initRLE(RLE_list[i])
             if event.key == pygame.K_F2:
