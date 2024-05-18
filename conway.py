@@ -1,11 +1,11 @@
 import pygame
 import math
-from copy import copy
+from copy import copy, deepcopy
 from rendering import render
 from screenUpdater import updateScreen
-from saver import save
-from saver import load
+from saver import save, load, readRLES
 from screenshotter import screenshot
+import decodeRLE
 
 # --init--
 pygame.init()
@@ -13,6 +13,7 @@ scr = (width, height) = (960, 960)
 screen = pygame.display.set_mode((width, height))
 game = True
 clock = pygame.time.Clock()
+RLE_list = readRLES()
 
 gridSize = (96, 96)
 cells = {}
@@ -33,9 +34,21 @@ def initGrid():
     for i in range(gridSize[0]):
         newCells[str(i)] = [copy(False) for i in range(gridSize[1])]
     return newCells
-
+def initRLE(rle):
+    cells = initGrid()
+    rleCells = decodeRLE.openRLE("rle/"+ rle)
+    size = rleCells["size"]
+    print(size)
+    for i in range(0, size[1]):
+        for j in range(0, size[0]):
+            try: 
+                cells[str(i)][j] = rleCells[str(i)][j]
+            except:
+                a = 0
+    return cells
 # -- pre launch --
 cells = initGrid()
+empty_grid = initGrid()
 paused = True
 ticker = 0
 speed = 60
@@ -78,6 +91,11 @@ while game:
                 save(cells)
             if event.key == pygame.K_F6:
                 cells = load(i)
+            if event.key == pygame.K_F7:
+                while True:
+                    if i > len(RLE_list): i -= 1
+                    else : break
+                cells = initRLE(RLE_list[i])
             if event.key == pygame.K_F2:
                 toScreenshot = True
         if event.type == pygame.MOUSEWHEEL:
