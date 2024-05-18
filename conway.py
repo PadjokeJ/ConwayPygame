@@ -92,9 +92,6 @@ while game:
             if event.key == pygame.K_F6:
                 cells = load(i)
             if event.key == pygame.K_F7:
-                while True:
-                    if i > len(RLE_list): i -= 1
-                    else : break
                 cells = initRLE(RLE_list[i])
             if event.key == pygame.K_F2:
                 toScreenshot = True
@@ -102,6 +99,9 @@ while game:
             i += int(event.y)
             if i < 0:
                 i = 0
+            while True:
+                if i > len(RLE_list) - 1: i -= 1
+                else : break
         if pygame.mouse.get_pressed(num_buttons=3)[0] == True:
             if not clicked:
                 state = not cells[str(pixSel[0])][pixSel[1]]
@@ -128,7 +128,7 @@ while game:
         screenshot(screen)
         toScreenshot = False
     pygame.draw.rect(screen, (120, 120, 120), (pixSel[0] * pixSize[0], pixSel[1] * pixSize[1], pixSize[0], pixSize[1]))
-    txt = font.render(str(i), False, (0, 0, 0))
+    txt = font.render(str(i) + RLE_list[i], False, (0, 0, 0))
     screen.blit(txt, (0, 0))
     pygame.display.flip()
 pygame.quit()
