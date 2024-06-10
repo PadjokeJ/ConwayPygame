@@ -9,16 +9,27 @@
 
 ## Controls
 SPACEBAR : stop or start playing the simulation
+
 LMB : draw and erase
+
 LSHIFT : move the simulation one frame forward
+
 F: make the simulation go SUPERSPEED
+
 S: make the simulation go slow
+
 SCROLL: change RLE file to load
+
 F7 : loads the selected RLE file
+
 F6 : loads user made pattern
+
 F5 : creates user made pattern
+
 F4 : clears the screen
+
 ARROW KEYS : move around the canvas
+
 
 ## Adding your own RLE files
 To add your own RLE files inside of the program, just drag them into the rle folder, the program will detect them automatically
