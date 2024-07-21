@@ -12,6 +12,9 @@ import decodeRLE
 pygame.init()
 scr = (width, height) = (960, 960)
 screen = pygame.display.set_mode((width, height))
+icon = pygame.image.load("icon.png")
+pygame.display.set_icon(icon)
+pygame.display.set_caption("Conway's game of life")
 game = True
 clock = pygame.time.Clock()
 RLE_list = readRLES()
